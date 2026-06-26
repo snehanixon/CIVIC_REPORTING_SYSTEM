@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Admin Login</h2>
+<form method="post" class="card form-card">
+  <label>Admin Email <input name="email" type="email" required></label>
+  <label>Password <input name="password" type="password" required></label>
+  <div><button class="btn" type="submit">Login as Admin</button></div>
+</form>
+{% endblock %}

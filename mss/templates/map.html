@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Reports Map - CivicHub{% endblock %}
+{% block content %}
+<section class="map-hero">
+  <h1>Reports Map</h1>
+  <p class="lead">See recent reports pinned on the map. Click a marker to view details and open the report.</p>
+  <div id="map" style="height:64vh;border-radius:8px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.08)"></div>
+</section>
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-o9N1j7kU2yS2b7g2l3kGg5cG0sI1T9f2W+v9g3C6M6k=" crossorigin=""/>
+<style>
+  .map-hero{max-width:1100px;margin:12px auto;padding:8px}
+  .map-hero h1{margin:0 0 6px}
+  .map-hero .lead{color:#444;margin-bottom:10px}
+  .leaflet-popup-content img{max-width:180px;display:block;margin:6px 0}
+</style>
+{% endblock %}
+
+{% block content_footer %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-V6sJbqf0R7Y2mP4Xl9k7u2JmFQ6q8y4d1v2M9YbqTnM=" crossorigin=""></script>
+<script>
+  (function(){
+    const map = L.map('map').setView([20.5937,78.9629],5); // default center (India)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 19, attribution: '&copy; OpenStreetMap contributors'}).addTo(map);
+    fetch('{{ url_for('reports_geojson') }}')
+      .then(r=>r.json())
+      .then(data=>{
+        const geojson = L.geoJSON(data, {
+          pointToLayer: function(feature, latlng){
+            return L.marker(latlng);
+          },
+          onEachFeature: function(feature, layer){
+            const p = feature.properties;
+            let html = `<strong>${p.title}</strong><br/><small>${p.category || ''} • ${p.location || ''}</small>`;
+            if(p.image){ html += `<br/><img src="/uploads/${p.image}" alt="report image"/>`; }
+            html += `<br/><a href="/admin" style="font-weight:600">Open report</a>`;
+            layer.bindPopup(html);
+          }
+        }).addTo(map);
+        if(data.features && data.features.length){ map.fitBounds(geojson.getBounds().pad(0.2)); }
+      }).catch(e=>{ console.error('Could not load geojson', e); });
+  })();
+</script>
+{% endblock %}

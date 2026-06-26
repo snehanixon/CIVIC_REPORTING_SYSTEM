@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Home - CivicHub{% endblock %}
+{% block content %}
+<section class="hero-animated">
+  <div class="hero-content">
+    <h1>Make your city better — one report at a time</h1>
+    <p class="lead">Report local civic issues quickly. Upload photos, track progress, and see your community improve.</p>
+    <div class="cta">
+      {% if user %}
+        <a class="btn big" href="{{ url_for('new_report') }}">Submit a Report</a>
+        <a class="btn outline" href="{{ url_for('my_reports') }}">My Reports</a>
+      {% else %}
+        <a class="btn big" href="{{ url_for('register') }}">Get Started</a>
+        <a class="btn outline" href="{{ url_for('login') }}">Login</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<section id="features" class="section features">
+  <h2>Features</h2>
+  <div class="feature-grid">
+    <div class="feature-card reveal">
+      <div class="icon">📸</div><h3>Upload Photos</h3><p>Attach images to clearly show the issue.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="icon">📍</div><h3>Location</h3><p>Add a text location for quick identification.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="icon">🔁</div><h3>Track Reports</h3><p>View status updates in your profile.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="icon">🛡️</div><h3>Admin Controls</h3><p>Admins can change status and follow up.</p>
+    </div>
+  </div>
+</section>
+
+<section id="stats" class="section stats">
+  <h2>Community Impact</h2>
+  <div class="stats-row">
+    <div class="stat-box"><div class="stat-num" data-target="{{ users_count }}">0</div><div class="stat-label">Users</div></div>
+    <div class="stat-box"><div class="stat-num" data-target="{{ resolved_count }}">0</div><div class="stat-label">Resolved</div></div>
+    <div class="stat-box"><div class="stat-num" data-target="{{ active_count }}">0</div><div class="stat-label">Active Reports</div></div>
+  </div>
+</section>
+
+
+
+<section class="cta-section">
+  <h2>Ready to help your community?</h2>
+  {% if user %}
+    <a class="btn big" href="{{ url_for('new_report') }}">Submit a Report</a>
+  {% else %}
+    <a class="btn big" href="{{ url_for('register') }}">Register Now</a>
+  {% endif %}
+</section>
+{% endblock %}
+
+

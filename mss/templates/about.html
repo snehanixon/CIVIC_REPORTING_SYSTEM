@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% block title %}About - CivicHub{% endblock %}
+{% block content %}
+<section class="about-hero">
+	<div class="hero-inner">
+		<div class="hero-illus" aria-hidden="true">
+			<!-- inline SVG city illustration -->
+			<svg width="320" height="160" viewBox="0 0 600 320" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="City illustration">
+				<rect x="0" y="200" width="600" height="120" fill="#e9f2fb"/>
+				<rect x="40" y="120" width="80" height="80" rx="6" fill="#2b87d6"/>
+				<rect x="140" y="80" width="100" height="120" rx="6" fill="#64b5f6"/>
+				<rect x="260" y="60" width="60" height="140" rx="6" fill="#81c784"/>
+				<rect x="340" y="100" width="90" height="100" rx="6" fill="#ffd54a"/>
+				<rect x="460" y="90" width="70" height="110" rx="6" fill="#ffb74d"/>
+				<path d="M0 200 H600" stroke="#cfe8ff" stroke-width="2"/>
+				<circle cx="520" cy="120" r="26" fill="#fff9c4" stroke="#ffd54a"/>
+			</svg>
+		</div>
+		<div class="hero-copy">
+			<h1>About CivicHub</h1>
+			<p class="lead">CivicHub connects residents and local authorities to quickly report, track and resolve civic issues in your neighborhood. Share photos, add locations, and follow progress until it's fixed.</p>
+			<p><a class="btn" href="{{ url_for('new_report') }}">Submit your first report</a></p>
+		</div>
+	</div>
+</section>
+<style>
+	:root{--accent:#2b87d6;--muted:#88a7c7}
+	.about-hero{background:linear-gradient(180deg,#f7fbff,#fff);padding:28px;border-radius:8px;margin-bottom:18px;position:relative;overflow:visible}
+	/* subtle decorative blobs */
+	.about-hero::before,.about-hero::after{content:"";position:absolute;border-radius:50%;opacity:0.08;pointer-events:none}
+	.about-hero::before{width:260px;height:260px;background:radial-gradient(circle at 30% 30%,#64b5f6,transparent 40%);left:-40px;top:-40px}
+	.about-hero::after{width:180px;height:180px;background:radial-gradient(circle at 70% 70%,#81c784,transparent 40%);right:-30px;bottom:-30px}
+	.hero-inner{display:flex;gap:18px;align-items:center;max-width:980px;margin:0 auto}
+	.hero-illus{flex:0 0 320px;transform-origin:center}
+	.hero-copy{flex:1}
+	.hero-copy h1{margin:0 0 8px;font-size:1.9rem}
+	.hero-copy .lead{color:#444;margin-bottom:12px}
+	.btn{display:inline-block;background:var(--accent);color:#fff;padding:8px 14px;border-radius:6px;text-decoration:none;box-shadow:0 6px 14px rgba(43,135,214,0.14);transition:transform .24s,box-shadow .24s}
+	.btn:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(43,135,214,0.16)}
+	.btn.pulse{animation: pulse 2000ms infinite;}
+
+	/* cards grid */
+	.about-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:980px;margin:6px auto 18px}
+	.card{background:#fff;border-radius:10px;padding:18px;box-shadow:0 6px 18px rgba(17,51,85,0.06);text-align:left;transform:translateY(12px);opacity:0}
+	.card-icon{width:48px;height:48px;margin-bottom:10px}
+	.card h3{margin:6px 0 6px}
+	/* hover/focus micro-interactions */
+	.card{transition:transform .22s cubic-bezier(.2,.9,.3,1),box-shadow .22s,filter .22s}
+	.card:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 14px 30px rgba(17,51,85,0.12)}
+	.card:focus-within{outline:none}
+	.card:focus-visible{box-shadow:0 8px 30px rgba(43,135,214,0.14);transform:translateY(-6px)}
+	.card svg path, .card svg circle, .card svg rect{transition:stroke .18s,fill .18s,transform .18s}
+	.card:hover svg path{stroke:var(--accent)}
+	.card:hover .card-icon{transform:translateY(-4px)}
+
+	/* keyframes for entrance and subtle float */
+	@keyframes cardIn { from { transform: translateY(18px); opacity:0 } to { transform: translateY(0); opacity:1 } }
+	@keyframes floatY { 0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)} }
+	@keyframes pulse { 0%{transform:scale(1)}50%{transform:scale(1.02)}100%{transform:scale(1)} }
+
+	/* trigger animations when .is-animated is present */
+	.is-animated .hero-illus{animation: floatY 4200ms ease-in-out infinite}
+	.is-animated .hero-illus svg rect:nth-child(2){animation: floatY 4800ms ease-in-out infinite;animation-delay:80ms}
+	.is-animated .hero-illus svg rect:nth-child(3){animation: floatY 4200ms ease-in-out infinite;animation-delay:140ms}
+	.is-animated .hero-illus svg rect:nth-child(4){animation: floatY 5000ms ease-in-out infinite;animation-delay:60ms}
+	.is-animated .card{animation: cardIn 520ms cubic-bezier(.2,.9,.25,1) forwards}
+	.is-animated .card:nth-child(1){animation-delay:120ms}
+	.is-animated .card:nth-child(2){animation-delay:220ms}
+	.is-animated .card:nth-child(3){animation-delay:320ms}
+
+	.about-guidelines{max-width:980px;margin:0 auto 40px;padding:8px}
+	.about-guidelines ul{margin-left:18px}
+	.about-guidelines ol{margin-left:18px}
+
+	@media(max-width:880px){
+		.hero-inner{flex-direction:column;align-items:flex-start}
+		.about-cards{grid-template-columns:1fr;gap:12px}
+		.hero-illus{flex:0 0 auto}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.is-animated .hero-illus, .is-animated .card, .btn.pulse { animation: none !important }
+	}
+</style>
+
+<script>
+// small script to add .is-animated after DOM ready so CSS animations run reliably
+document.addEventListener('DOMContentLoaded', function(){
+	setTimeout(function(){ document.body.classList.add('is-animated'); var hero=document.querySelector('.about-hero'); if(hero) hero.classList.add('is-animated'); document.querySelectorAll('.card').forEach(function(c,i){ c.classList.add('is-animated'); }); var btn=document.querySelector('.hero-copy .btn'); if(btn) btn.classList.add('pulse'); }, 120);
+});
+</script>
+		</div>
+		<h3>Community Rules</h3>
+		<p>We encourage respectful, accurate reporting. Avoid sharing sensitive personal data and check for duplicates before reporting.</p>
+	</div>
+</section>
+
+<section class="about-guidelines">
+	<h2>Community Guidelines</h2>
+	<ul>
+		<li><strong>Be accurate:</strong> Provide clear descriptions and a correct location—screenshots, photos and a short note help authorities act faster.</li>
+		<li><strong>Be respectful:</strong> Use civil language. Harassment, hate speech or personal attacks are not permitted.</li>
+		<li><strong>No spam or duplicates:</strong> Check existing reports before filing a new one. Duplicate reports may be merged.</li>
+		<li><strong>Privacy first:</strong> Do not post others' personal or sensitive information without consent.</li>
+		<li><strong>Follow the law:</strong> Don’t use this platform to promote illegal activity or to publish copyrighted content you don’t own.</li>
+	</ul>
+
+	<h3>How to report effectively</h3>
+	<ol>
+		<li>Choose the right category (roads, sanitation, lighting, water, etc.).</li>
+		<li>Add a concise description: what, where, and when.</li>
+		<li>Attach one or more clear photos. A close-up and a wide shot together are ideal.</li>
+		<li>Provide a location text or landmark. If available, include a street address or GPS coordinates.</li>
+		<li>Monitor your report: officials may comment or mark it resolved; you can add updates if the situation changes.</li>
+	</ol>
+
+	<h3>Privacy & Safety</h3>
+	<p>We take privacy seriously. Personal information in reports is visible to other users and admins—avoid sharing sensitive data. We store minimal information required to operate the service (your name, email, and reports). If you want an account deleted, contact us and we will remove your data in accordance with our policy.</p>
+
+	<h3>Response and Follow-up</h3>
+	<p>Reports are routed to local authorities where possible; response times vary by department and location. When a report is resolved, it will be marked and you may receive a notification (if you opted in).</p>
+
+	<h3>Contact</h3>
+	<p>For assistance, feedback, or to request data removal, email us at <a href="mailto:contact@civichub.example">contact@civichub.example</a> or use the contact form on this site.</p>
+
+	<h3>Access our site via QR Code</h3>
+	<div class="qr-section">
+		<img src="{{ url_for('generate_qr') }}" alt="QR Code to access CivicHub" class="qr-code">
+		<p>Scan this QR code with your smartphone to quickly access our website.</p>
+	</div>	F:/mss/.venv/Scripts/python.exe app.py
+	<style>
+		.qr-section {
+			text-align: center;
+			margin: 20px 0;
+			padding: 20px;
+			background: #f7fbff;
+			border-radius: 8px;
+		}
+		.qr-code {
+			width: 200px;
+			height: 200px;
+			margin: 10px auto;
+			display: block;
+			background: white;
+			padding: 10px;
+			border-radius: 8px;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+		}
+	</style>
+</section>
+
+{% endblock %}
+
+<style>
+	.about-hero{background:linear-gradient(180deg,#f7fbff,#fff);padding:28px;border-radius:8px;margin-bottom:18px}
+	.hero-inner{display:flex;gap:18px;align-items:center;max-width:980px;margin:0 auto}
+	.hero-illus{flex:0 0 320px}
+	.hero-copy{flex:1}
+	.hero-copy h1{margin:0 0 8px;font-size:1.8rem}
+	.hero-copy .lead{color:#444;margin-bottom:12px}
+	.about-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:980px;margin:6px auto 18px}
+	.card{background:#fff;border-radius:10px;padding:16px;box-shadow:0 6px 18px rgba(17,51,85,0.06);text-align:left}
+	.card-icon{width:48px;height:48px;margin-bottom:8px}
+	.card h3{margin:6px 0 6px}
+	.card{transition:transform .22s cubic-bezier(.2,.9,.3,1),box-shadow .22s,transform-origin:center}
+	.card:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 14px 30px rgba(17,51,85,0.12)}
+	.card:focus-within{outline:none}
+	.card:focus-visible{box-shadow:0 8px 30px rgba(43,135,214,0.14);transform:translateY(-6px)}
+	.card svg path, .card svg circle, .card svg rect{transition:stroke .18s,fill .18s}
+	.card:hover svg path{stroke:#2b87d6}
+	.card:hover .card-icon{transform:translateY(-4px)}
+	.about-guidelines{max-width:980px;margin:0 auto 40px;padding:8px}
+	.about-guidelines ul{margin-left:18px}
+	.about-guidelines ol{margin-left:18px}
+	.btn{display:inline-block;background:#2b87d6;color:#fff;padding:8px 14px;border-radius:6px;text-decoration:none}
+	@media(max-width:880px){
+		.hero-inner{flex-direction:column;align-items:flex-start}
+		.about-cards{grid-template-columns:1fr;gap:12px}
+		.hero-illus{flex:0 0 auto}
+	}
+</style>

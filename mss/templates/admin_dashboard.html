@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Admin Dashboard</h2>
+<table class="admin-table">
+  <thead><tr><th>ID</th><th>Title</th><th>User</th><th>Category</th><th>Location</th><th>Image</th><th>Status</th><th>Actions</th></tr></thead>
+  <tbody>
+  {% for r in reports %}
+    <tr>
+      <td>{{ r.id }}</td><td>{{ r.title }}</td><td>{{ r.user_name or '—' }}</td><td>{{ r.category }}</td><td>{{ r.location or '—' }}</td>
+      <td>{% if r.image_path %}<a href="{{ url_for('uploaded_file', filename=r.image_path) }}" target="_blank">View</a>{% endif %}</td>
+      <td>{{ r.status }}</td>
+      <td>
+        <form method="post" action="{{ url_for('admin_status', report_id=r.id, status='in_progress', redirect='home') }}" style="display:inline"><button class="btn small" type="submit">In Progress</button></form>
+        <form method="post" action="{{ url_for('admin_status', report_id=r.id, status='resolved', redirect='home') }}" style="display:inline">
+          <input type="number" name="points" min="0" placeholder="points" style="width:70px"> 
+          <button class="btn small" type="submit">Resolve & Award</button>
+        </form>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

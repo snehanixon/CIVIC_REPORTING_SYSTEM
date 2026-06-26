@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>My Reports</h2>
+{% if user %}
+  <div class="user-points">Your Points: <strong>{{ user.points or 0 }}</strong></div>
+{% endif %}
+<div class="reports">
+  {% for r in reports %}
+    <div class="report-card">
+      <div class="r-head"><h3>{{ r.title }}</h3><small>{{ r.status }}</small></div>
+      <div><strong>Category:</strong> {{ r.category }}</div>
+      <div><strong>Location:</strong> {{ r.location or '—' }}</div>
+      <p>{{ r.description }}</p>
+      {% if r.image_path %}<img src="{{ url_for('uploaded_file', filename=r.image_path) }}" class="thumb">{% endif %}
+      <div class="r-meta">Submitted: {{ r.created_at }}</div>
+    </div>
+  {% else %}
+    <p>No reports yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}

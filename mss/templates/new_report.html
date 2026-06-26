@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>New Report</h2>
+<form method="post" enctype="multipart/form-data" class="card form-card">
+  <label>Title <input name="title" required></label>
+  <label>Category
+    <select name="category">
+      {% for c in categories %}<option value="{{ c }}">{{ c }}</option>{% endfor %}
+    </select>
+  </label>
+  <label>Location <input name="location"></label>
+  <label>Description <textarea name="description" required></textarea></label>
+  <label>Image (optional) <input type="file" name="image" accept="image/*"></label>
+  <div><button class="btn" type="submit">Submit Report</button></div>
+</form>
+{% endblock %}
